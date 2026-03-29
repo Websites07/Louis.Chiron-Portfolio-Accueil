@@ -3,386 +3,776 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rodolphe Chiron | VRP Chaussures </title>
+<title>Rodolphe Chiron | VRP Chaussures</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
-:root{
-  --black:#111;
-  --white:#f5f5f5;
-  --beige:#c6a87d;
-  --gold:#b08d57;
-  --transition: all 0.4s ease;
+:root {
+  --ink: #0e0d0b;
+  --paper: #f7f4ef;
+  --cream: #ede8df;
+  --gold: #b08d57;
+  --gold-light: #c9a96e;
+  --gold-dim: rgba(176,141,87,0.18);
+  --text-muted: #7a7166;
+  --transition: all 0.45s cubic-bezier(0.16,1,0.3,1);
 }
-*{margin:0;padding:0;box-sizing:border-box;}
-body{
-  font-family:'Montserrat', sans-serif;
-  background:var(--black);
-  color:var(--white);
-  line-height:1.6;
-  scroll-behavior:smooth;
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--ink);
+  color: var(--paper);
+  line-height: 1.65;
+  overflow-x: hidden;
 }
-section{padding:100px 8%;}
-h1,h2,h3{font-family:'Playfair Display', serif;}
-h2{
-  font-size:2.5rem;
-  margin-bottom:40px;
-  text-align:center;
-  position:relative;
+
+/* ── NOISE TEXTURE OVERLAY ── */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.35;
 }
-h2::after{
-  content:"";
-  width:60px;
-  height:2px;
-  background:var(--gold);
-  display:block;
-  margin:15px auto 0;
+
+/* ── TYPOGRAPHY ── */
+h1, h2, h3 { font-family: 'Cormorant Garamond', serif; font-weight: 300; letter-spacing: -0.01em; }
+
+/* ── NAV ── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 22px 6%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(to bottom, rgba(14,13,11,0.95), transparent);
 }
-.hero{
-  height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  background:linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)),
-  url('https://forbes.it/wp-content/uploads/2020/10/1_SAUCONY-STUDIO_1630_LOW.jpg') center/cover fixed;
+
+.nav-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--paper);
+  text-decoration: none;
 }
-.hero h1{font-size:3rem;margin-bottom:20px;}
-.about{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:18px;
-  text-align:center;
+
+.nav-badge {
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  border: 1px solid var(--gold-dim);
+  padding: 6px 14px;
+  border-radius: 2px;
 }
-.about img{
-  flex:none;
-  max-width:120px;
-  width:120px;
-  height:120px;
-  border-radius:50%;
-  object-fit:cover;
+
+/* ── HERO ── */
+.hero {
+  height: 100vh;
+  min-height: 640px;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  padding: 0 6% 10vh;
+  overflow: hidden;
 }
-.about-text{flex:none;max-width:840px;padding:10px 20px}
-.stats{
-  display:flex;
-  gap:30px;
-  margin-top:20px;
-  flex-wrap:wrap;
-  justify-content:center;
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background: url('https://forbes.it/wp-content/uploads/2020/10/1_SAUCONY-STUDIO_1630_LOW.jpg') center/cover no-repeat;
+  transform: scale(1.04);
+  animation: heroZoom 14s ease-out forwards;
 }
-.about-text .presentation{margin-top:12px;margin-bottom:10px;font-size:1.05rem}
-.about-text .contact{margin:6px 0;color:var(--beige)}
-.about-text .contact a{color:var(--white);text-decoration:none}
-.stat{text-align:center;}
-.stat h3{
-  color:var(--gold);
-  font-size:2rem;
+
+@keyframes heroZoom {
+  from { transform: scale(1.04); }
+  to   { transform: scale(1.0); }
 }
-.brand-section{
-  background:#181818;
+
+.hero-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(14,13,11,0.96) 0%,
+    rgba(14,13,11,0.55) 45%,
+    rgba(14,13,11,0.2) 100%
+  );
 }
-.services-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-  gap:30px;
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 780px;
 }
-.card{
-  background:rgba(255,255,255,0.05);
-  border:1px solid rgba(176,141,87,0.3);
-  padding:30px 22px;
-  border-radius:20px;
-  transition:var(--transition);
-  display:flex;
-  flex-direction:column;
-  align-items:stretch;
-  justify-content:flex-start;
-  gap:18px;
+
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 22px;
+  opacity: 0;
+  animation: fadeUp 0.8s 0.3s ease forwards;
 }
-.card:hover{
-  transform:translateY(-10px);
-  box-shadow:0 10px 30px rgba(176,141,87,0.2);
+
+.hero-eyebrow::before {
+  content: "";
+  width: 36px; height: 1px;
+  background: var(--gold);
+  display: block;
 }
-.card i{
-  font-size:2rem;
-  color:var(--gold);
-  margin-bottom:10px;
+
+.hero h1 {
+  font-size: clamp(3.2rem, 7vw, 5.8rem);
+  font-weight: 300;
+  line-height: 1.0;
+  margin-bottom: 20px;
+  opacity: 0;
+  animation: fadeUp 0.9s 0.5s ease forwards;
 }
-.card .btn{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  margin-top:0;
-  padding:14px 22px;
-  background:var(--gold);
-  color:var(--black);
-  border-radius:12px;
-  text-decoration:none;
-  font-weight:700;
-  font-size:1.05rem;
-  transition:var(--transition);
+
+.hero h1 em {
+  font-style: italic;
+  color: var(--gold-light);
 }
-.card .btn:hover{transform:translateY(-3px);opacity:0.95}
-.card .card-content{flex:1;width:100%}
-.card .card-actions{display:flex;flex-direction:row;gap:10px;align-items:stretch;justify-content:space-between;width:100%}
-.card .card-actions > a{flex:1}
-.card .btn.secondary{background:transparent;color:var(--gold);border:1px solid rgba(176,141,87,0.3)}
-@media(max-width:700px){
-  .card{flex-direction:column;align-items:stretch}
-  .card .card-actions{flex-direction:row;align-self:stretch}
-  .card .btn{margin-top:0}
+
+.hero-sub {
+  font-size: 1.05rem;
+  font-weight: 300;
+  color: rgba(247,244,239,0.65);
+  max-width: 480px;
+  opacity: 0;
+  animation: fadeUp 0.9s 0.7s ease forwards;
 }
-.card.only-actions{min-height:140px}
-.card.only-actions .card-content{display:none}
-.card.only-actions .card-actions{display:flex;flex-direction:row;align-items:center;justify-content:center;gap:14px;width:100%}
-.card.only-actions .card-actions > a{flex:1}
-.card.only-actions .btn{padding:20px 32px;font-size:1.35rem;border-radius:14px;text-align:center}
-.card.only-actions .btn.secondary{padding:18px 30px}
-footer{
-  text-align:center;
-  padding:30px;
-  border-top:1px solid rgba(176,141,87,0.3);
+
+.hero-line {
+  position: absolute;
+  right: 6%; bottom: 10vh;
+  width: 1px;
+  height: 80px;
+  background: linear-gradient(to bottom, transparent, var(--gold));
+  z-index: 2;
+  opacity: 0;
+  animation: fadeIn 1s 1.2s ease forwards;
 }
-@media(max-width:768px){
-  section{padding:70px 6%;}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+/* ── SECTION BASE ── */
+section { padding: 110px 6%; }
+
+.section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.7rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 18px;
+}
+
+.section-label::before {
+  content: "";
+  width: 28px; height: 1px;
+  background: var(--gold);
+  display: block;
+}
+
+h2.section-title {
+  font-size: clamp(2.2rem, 4vw, 3.4rem);
+  font-weight: 300;
+  line-height: 1.1;
+  margin-bottom: 60px;
+  max-width: 640px;
+}
+
+h2.section-title.centered {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ── DIVIDER ── */
+.divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(176,141,87,0.35), transparent);
+  margin: 0;
+}
+
+/* ── ABOUT ── */
+.about-wrap {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 80px;
+  align-items: start;
+}
+
+@media (max-width: 860px) {
+  .about-wrap { grid-template-columns: 1fr; gap: 40px; }
+}
+
+.about-portrait {
+  position: relative;
+}
+
+.about-portrait img {
+  width: 100%;
+  max-width: 200px;
+  aspect-ratio: 1;
+  border-radius: 4px;
+  object-fit: cover;
+  display: block;
+  filter: grayscale(20%);
+  border: 1px solid var(--gold-dim);
+}
+
+.about-portrait::after {
+  content: "";
+  position: absolute;
+  top: 16px; left: 16px;
+  width: 100%; max-width: 200px;
+  aspect-ratio: 1;
+  border: 1px solid var(--gold-dim);
+  border-radius: 4px;
+  z-index: -1;
+}
+
+.about-body {}
+
+.about-body .pitch {
+  font-size: 1.25rem;
+  font-weight: 300;
+  line-height: 1.7;
+  color: rgba(247,244,239,0.82);
+  margin-bottom: 36px;
+  font-family: 'Cormorant Garamond', serif;
+}
+
+.contact-row {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+  margin-bottom: 44px;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.92rem;
+  color: rgba(247,244,239,0.7);
+}
+
+.contact-item i { color: var(--gold); font-size: 0.85rem; }
+.contact-item a { color: inherit; text-decoration: none; transition: color 0.2s; }
+.contact-item a:hover { color: var(--gold-light); }
+
+.stats-row {
+  display: flex;
+  gap: 50px;
+  flex-wrap: wrap;
+}
+
+.stat-item {}
+
+.stat-item .num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 3rem;
+  font-weight: 300;
+  color: var(--gold-light);
+  line-height: 1;
+}
+
+.stat-item .label {
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* ── BRANDS SECTION ── */
+.brand-block {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  align-items: stretch;
+  min-height: 540px;
+  border: 1px solid rgba(176,141,87,0.14);
+  border-radius: 4px;
+  overflow: hidden;
+  transition: var(--transition);
+}
+
+.brand-block:hover {
+  border-color: rgba(176,141,87,0.3);
+  box-shadow: 0 24px 60px rgba(0,0,0,0.4);
+}
+
+.brand-block.reversed { direction: rtl; }
+.brand-block.reversed > * { direction: ltr; }
+
+.brand-visual {
+  position: relative;
+  overflow: hidden;
+  min-height: 400px;
+}
+
+.brand-visual img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.7s cubic-bezier(0.16,1,0.3,1);
+  filter: grayscale(15%);
+}
+
+.brand-block:hover .brand-visual img {
+  transform: scale(1.06);
+}
+
+.brand-visual-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(14,13,11,0.55) 0%, rgba(14,13,11,0.1) 100%);
+}
+
+.brand-info {
+  padding: 56px 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: #141210;
+  border-left: 1px solid rgba(176,141,87,0.1);
+}
+
+.brand-block.reversed .brand-info {
+  border-left: none;
+  border-right: 1px solid rgba(176,141,87,0.1);
+}
+
+.brand-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 16px;
+}
+
+.brand-tag i { font-size: 0.8rem; }
+
+.brand-name {
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  font-weight: 300;
+  line-height: 1.05;
+  margin-bottom: 24px;
+}
+
+.brand-desc {
+  font-size: 0.92rem;
+  line-height: 1.75;
+  color: rgba(247,244,239,0.62);
+  flex: 1;
+  margin-bottom: 40px;
+}
+
+.brand-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 24px;
+  background: var(--gold);
+  color: var(--ink);
+  border-radius: 2px;
+  text-decoration: none;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: var(--transition);
+}
+
+.btn-primary:hover {
+  background: var(--gold-light);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(176,141,87,0.3);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 22px;
+  background: transparent;
+  color: var(--paper);
+  border: 1px solid rgba(247,244,239,0.2);
+  border-radius: 2px;
+  text-decoration: none;
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: var(--transition);
+}
+
+.btn-secondary:hover {
+  border-color: var(--gold);
+  color: var(--gold-light);
+  transform: translateY(-2px);
+}
+
+@media (max-width: 900px) {
+  .brand-block,
+  .brand-block.reversed {
+    grid-template-columns: 1fr;
+    direction: ltr;
+  }
+  .brand-visual { min-height: 280px; }
+  .brand-info {
+    padding: 36px 28px;
+    border-left: none !important;
+    border-right: none !important;
+    border-top: 1px solid rgba(176,141,87,0.1);
+  }
+}
+
+/* ── BRANDS WRAPPER ── */
+.brands-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+}
+
+/* ── GALLERY ── */
+.gallery-section {
+  background: var(--paper);
+  padding: 100px 6%;
+}
+
+.gallery-section .section-label { color: var(--gold); }
+.gallery-section h2.section-title { color: var(--ink); }
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: auto;
+  gap: 16px;
+}
+
+.gal-item {
+  overflow: hidden;
+  border-radius: 3px;
+  cursor: pointer;
+  position: relative;
+}
+
+.gal-item::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(14,13,11,0);
+  transition: background 0.4s ease;
+}
+
+.gal-item:hover::after {
+  background: rgba(14,13,11,0.25);
+}
+
+.gal-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s cubic-bezier(0.16,1,0.3,1);
+}
+
+.gal-item:hover img { transform: scale(1.06); }
+
+/* Bento layout */
+.gal-item:nth-child(1) { grid-column: 1/6;  height: 360px; }
+.gal-item:nth-child(2) { grid-column: 6/13; height: 360px; }
+.gal-item:nth-child(3) { grid-column: 1/5;  height: 280px; }
+.gal-item:nth-child(4) { grid-column: 5/9;  height: 280px; }
+.gal-item:nth-child(5) { grid-column: 9/13; height: 280px; }
+
+@media (max-width: 768px) {
+  .gallery-grid { display: flex; flex-direction: column; }
+  .gal-item { height: 230px !important; }
+}
+
+/* ── FOOTER ── */
+footer {
+  padding: 48px 6%;
+  border-top: 1px solid rgba(176,141,87,0.18);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.footer-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(247,244,239,0.5);
+}
+
+.footer-copy {
+  font-size: 0.78rem;
+  color: rgba(247,244,239,0.35);
+  letter-spacing: 0.06em;
+}
+
+/* ── SCROLL REVEAL ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(36px);
+  transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.16,1,0.3,1);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 </style>
 </head>
 <body>
 
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">Rodolphe Chiron</a>
+  <span class="nav-badge">VRP Multicartes</span>
+</nav>
+
 <!-- HERO -->
 <section class="hero">
-  <div>
-    <h1>Rodolphe Chiron </h1>
-    <p>Agent commercial VRP multicartes chaussures</p>
+  <div class="hero-bg"></div>
+  <div class="hero-line"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Agent commercial — Secteur Nord-Ouest</div>
+    <h1>Rodolphe<br><em>Chiron</em></h1>
+    <p class="hero-sub">VRP multicartes chaussures. Marques sélectionnées avec exigence, partenariats bâtis sur la durée.</p>
   </div>
 </section>
+
+<div class="divider"></div>
 
 <!-- À PROPOS -->
 <section>
-  <h2>À propos</h2>
-  <div class="about">
-    <img src="https://media.licdn.com/dms/image/v2/D4E03AQFEzWIAdeVEJQ/profile-displayphoto-scale_200_200/B4EZo3BtCOKYAc-/0/1761859785498?e=2147483647&v=beta&t=8vFi_Y2lRDEi0HkNaKYaNLo_voF8VMB-Wtz0ENw4KxQ" alt="Portrait Rodolphe Chiron">
-    <div class="about-text">
-      <p class="presentation">Agent commercial et VRP multicartes chaussures, je développe le secteur Nord-Ouest. Mon métier consiste à sélectionner des marques qui partagent mes valeurs : sérieux, professionnalisme, rigueur, organisation, réactivité et sens de l'humain.</p>
-      <p class="contact email"><a href="mailto:rodolphechiron@gmail.com">rodolphechiron@gmail.com</a></p>
-      <p class="contact phone">06 88 18 16 45</p>
-
-      <div class="stats">
-    
-        <div class="stat"><h3>20+</h3><p>Années d'expérience</p></div>
-       
+  <div class="reveal">
+    <div class="section-label">Présentation</div>
+    <h2 class="section-title">Un partenaire terrain,<br><em>pas un simple intermédiaire</em></h2>
+  </div>
+  <div class="about-wrap reveal">
+    <div class="about-portrait">
+      <img src="https://media.licdn.com/dms/image/v2/D4E03AQFEzWIAdeVEJQ/profile-displayphoto-scale_200_200/B4EZo3BtCOKYAc-/0/1761859785498?e=2147483647&v=beta&t=8vFi_Y2lRDEi0HkNaKYaNLo_voF8VMB-Wtz0ENw4KxQ" alt="Portrait Rodolphe Chiron">
+    </div>
+    <div class="about-body">
+      <p class="pitch">Agent commercial et VRP multicartes chaussures, je développe le secteur Nord-Ouest. Mon métier consiste à sélectionner des marques qui partagent mes valeurs : sérieux, professionnalisme, rigueur, organisation, réactivité et sens de l'humain.</p>
+      <div class="contact-row">
+        <div class="contact-item"><i class="fas fa-envelope"></i><a href="mailto:rodolphechiron@gmail.com">rodolphechiron@gmail.com</a></div>
+        <div class="contact-item"><i class="fas fa-phone"></i><span>06 88 18 16 45</span></div>
+      </div>
+      <div class="stats-row">
+        <div class="stat-item">
+          <div class="num">20<em style="font-style:normal;font-size:1.5rem">+</em></div>
+          <div class="label">Années d'expérience</div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- SAUCONY -->
-<section class="brand-section">
-  <h2>Saucony Kids</h2>
-  <div class="services-grid">
-    <div class="card">
-      <div class="card-content">
-        <i class="fas fa-bolt"></i>
-        <h3>SAUCONY KIDS</h3>
-        <p>Saucony est une marque américaine fondée en 1898 à Kutztown, en Pennsylvanie, au bord du ruisseau Saucony Creek, dont elle tire son nom et son emblème. Depuis plus d’un siècle, la maison se consacre à la création de chaussures de course et de sport alliant savoir-faire traditionnel et innovation technologique. Reconnue pour la qualité de ses semelles et le confort de ses modèles, Saucony a su évoluer au fil du temps en combinant performance, bien-être et style. Aujourd’hui, la marque propose des collections pour toute la famille, dont une ligne dédiée aux enfants, « Saucony Kids », qui reprend les valeurs fondatrices de dynamisme et de mouvement. Entre héritage sportif et design moderne, Saucony continue d’incarner la passion de la course et l’amour du dépassement de soi. Sur notre e-shop, découvrez une sélection de modèles iconiques pour petits et grands, parfaits pour conjuguer confort et allure au quotidien.</p>
-      </div>
-      <div class="card-actions">
-        <a class="btn" href="https://www.saucony.com/FR/fr_FR/kids/" target="_blank" rel="noopener">Site officiel</a>
-        <a class="btn secondary" href="https://www.dropbox.com/scl/fi/xshldcosjnupwd91kqjb0/SAUCONY-EU-AW26-FOOTWEAR-CATALOGUE.pdf?rlkey=x5vcd0enjpmknfpzz7o5lu6ew&e=2&st=kden0pki&dl=0" target="_blank" rel="noopener">Catalogue</a>
-      </div>
-    </div>
-  </div>
-</section>
+<div class="divider"></div>
 
-<!-- MERRELL -->
+<!-- MARQUES -->
 <section>
-  <h2>Merrell Kids</h2>
-  <div class="services-grid">
-    <div class="card">
-      <div class="card-content">
-        <i class="fas fa-mountain"></i>
-        <h3>Outdoor</h3>
-        <p>Merrell est une marque américaine fondée en 1981 dans le Vermont, née de la passion pour la nature, la randonnée et l’exploration en plein air. Depuis ses débuts, elle s’est imposée comme une référence dans l’univers de la chaussure outdoor grâce à son savoir-faire unique et à son exigence en matière de confort, de durabilité et d’innovation. Pensée pour accompagner chaque pas, Merrell conçoit des modèles capables d’affronter tous les terrains, du sentier de montagne aux rues de la ville. La ligne Merrell Kids reprend cet esprit d’aventure en version miniature : des chaussures solides, légères et confortables, conçues pour suivre les enfants dans toutes leurs explorations. Fidèle à ses valeurs d’authenticité et de liberté, Merrell encourage les plus jeunes à découvrir le monde, à jouer dehors et à cultiver leur curiosité.
+  <div class="reveal">
+    <div class="section-label">Portefeuille marques</div>
+    <h2 class="section-title">Des collections<br><em>soigneusement choisies</em></h2>
+  </div>
+
+  <div class="brands-stack">
+
+    <!-- SAUCONY -->
+    <div class="brand-block reveal">
+      <div class="brand-visual">
+        <img src="https://s7d4.scene7.com/is/image/WolverineWorldWide/S70963-1_1?$dw-hi-res$" alt="Saucony Kids">
+        <div class="brand-visual-overlay"></div>
       </div>
-      <div class="card-actions">
-        <a class="btn" href="https://www.merrell.com/FR/fr_FR/kids-boys-big-kids/" target="_blank" rel="noopener">Lien marque</a>
-        <a class="btn secondary" href="https://www.dropbox.com/scl/fi/0c5brwb1g28bc2on2qc4p/MERRELL-KIDS-EU-AW26-FOOTWEAR-CATALOGUE.pdf?rlkey=2a5kv290popnpkxg0nihb2r64&e=2&st=jihhfokb&dl=0" target="_blank" rel="noopener">Fiche produit</a>
+      <div class="brand-info">
+        <div>
+          <div class="brand-tag"><i class="fas fa-bolt"></i> Performance</div>
+          <h3 class="brand-name">Saucony<br>Kids</h3>
+          <p class="brand-desc">Saucony est une marque américaine fondée en 1898 à Kutztown, en Pennsylvanie, au bord du ruisseau Saucony Creek, dont elle tire son nom et son emblème. Depuis plus d'un siècle, la maison se consacre à la création de chaussures de course et de sport alliant savoir-faire traditionnel et innovation technologique. Reconnue pour la qualité de ses semelles et le confort de ses modèles, Saucony a su évoluer au fil du temps en combinant performance, bien-être et style. Aujourd'hui, la marque propose des collections pour toute la famille, dont une ligne dédiée aux enfants, « Saucony Kids », qui reprend les valeurs fondatrices de dynamisme et de mouvement. Entre héritage sportif et design moderne, Saucony continue d'incarner la passion de la course et l'amour du dépassement de soi. Sur notre e-shop, découvrez une sélection de modèles iconiques pour petits et grands, parfaits pour conjuguer confort et allure au quotidien.</p>
+        </div>
+        <div class="brand-actions">
+          <a class="btn-primary" href="https://www.saucony.com/FR/fr_FR/kids/" target="_blank" rel="noopener"><i class="fas fa-arrow-up-right-from-square"></i> Site officiel</a>
+          <a class="btn-secondary" href="https://www.dropbox.com/scl/fi/xshldcosjnupwd91kqjb0/SAUCONY-EU-AW26-FOOTWEAR-CATALOGUE.pdf?rlkey=x5vcd0enjpmknfpzz7o5lu6ew&e=2&st=kden0pki&dl=0" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Catalogue</a>
+        </div>
       </div>
+    </div>
+
+    <!-- MERRELL -->
+    <div class="brand-block reversed reveal">
+      <div class="brand-visual">
+        <img src="https://static.wixstatic.com/media/9e5a83_0d18090c80ad417ebd040674d2c69a49~mv2.jpg/v1/fill/w_562,h_542,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/18289114051218545.jpg" alt="Merrell Kids">
+        <div class="brand-visual-overlay"></div>
+      </div>
+      <div class="brand-info">
+        <div>
+          <div class="brand-tag"><i class="fas fa-mountain"></i> Outdoor</div>
+          <h3 class="brand-name">Merrell<br>Kids</h3>
+          <p class="brand-desc">Merrell est une marque américaine fondée en 1981 dans le Vermont, née de la passion pour la nature, la randonnée et l'exploration en plein air. Depuis ses débuts, elle s'est imposée comme une référence dans l'univers de la chaussure outdoor grâce à son savoir-faire unique et à son exigence en matière de confort, de durabilité et d'innovation. Pensée pour accompagner chaque pas, Merrell conçoit des modèles capables d'affronter tous les terrains, du sentier de montagne aux rues de la ville. La ligne Merrell Kids reprend cet esprit d'aventure en version miniature : des chaussures solides, légères et confortables, conçues pour suivre les enfants dans toutes leurs explorations.</p>
+        </div>
+        <div class="brand-actions">
+          <a class="btn-primary" href="https://www.merrell.com/FR/fr_FR/kids-boys-big-kids/" target="_blank" rel="noopener"><i class="fas fa-arrow-up-right-from-square"></i> Lien marque</a>
+          <a class="btn-secondary" href="https://www.dropbox.com/scl/fi/0c5brwb1g28bc2on2qc4p/MERRELL-KIDS-EU-AW26-FOOTWEAR-CATALOGUE.pdf?rlkey=2a5kv290popnpkxg0nihb2r64&e=2&st=jihhfokb&dl=0" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Fiche produit</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- HIP -->
+    <div class="brand-block reveal">
+      <div class="brand-visual">
+        <img src="https://www.bing.com/th?id=OPEC.5euGMynoWsaOhg474C474&o=5&pid=21.1&w=128&h=188&qlt=100&dpr=1,3&o=2&bw=6&bc=FFFFFF" alt="HIP Kids">
+        <div class="brand-visual-overlay"></div>
+      </div>
+      <div class="brand-info">
+        <div>
+          <div class="brand-tag"><i class="fas fa-child"></i> Confort quotidien</div>
+          <h3 class="brand-name">HIP<br>Kids</h3>
+          <p class="brand-desc">Hip est une marque néerlandaise fondée dans les années 1970, reconnue pour son savoir-faire dans la création de chaussures pour enfants à la fois stylées, confortables et de grande qualité. Alliant design contemporain et finitions soignées, la maison Hip met un point d'honneur à proposer des modèles qui reflètent les tendances actuelles tout en restant adaptés au quotidien des plus jeunes. Fabriquées avec des matériaux nobles et des cuirs souples, les chaussures Hip accompagnent les enfants dans toutes leurs aventures, entre confort, liberté de mouvement et élégance décontractée.</p>
+        </div>
+        <div class="brand-actions">
+          <a class="btn-primary" href="https://www.hipshoestyle.com/" target="_blank" rel="noopener"><i class="fas fa-arrow-up-right-from-square"></i> Site officiel</a>
+          <a class="btn-secondary" href="#" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Catalogue</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- PLAYONE -->
+    <div class="brand-block reversed reveal">
+      <div class="brand-visual">
+        <img src="https://soulierscompagnie.com/42481-home_default/dubai-v1-cuir-kaki-vert-play-one.jpg" alt="PlayOne">
+        <div class="brand-visual-overlay"></div>
+      </div>
+      <div class="brand-info">
+        <div>
+          <div class="brand-tag"><i class="fas fa-running"></i> Sport Lifestyle</div>
+          <h3 class="brand-name">Play<br>One</h3>
+          <p class="brand-desc">Play One est une marque italienne qui puise son inspiration dans l'art du mouvement et le goût du beau. Chaque paire est pensée et fabriquée avec soin, en utilisant des matériaux de qualité sélectionnés pour leur souplesse, leur résistance et leur confort. Cuirs véritables, textiles techniques et semelles légères se combinent pour offrir des chaussures aussi agréables à porter qu'élégantes à regarder. Fidèle au savoir-faire italien, Play One mise sur des lignes épurées, des finitions précises et un style intemporel.</p>
+        </div>
+        <div class="brand-actions">
+          <a class="btn-primary" href="https://www.dropbox.com/scl/fi/0c5brwb1g28bc2on2qc4p/MERRELL-KIDS-EU-AW26-FOOTWEAR-CATALOGUE.pdf?rlkey=2a5kv290popnpkxg0nihb2r64&e=2&st=jihhfokb&dl=0" target="_blank" rel="noopener"><i class="fas fa-arrow-up-right-from-square"></i> Site officiel</a>
+          <a class="btn-secondary" href="https://www.dropbox.com/scl/fi/qi6lipexq9b63730h6uqv/catalogo_playone_agosto_def1_compressed.pdf?rlkey=9r8seu4f8f560ru391vs4ntzf&e=1&st=945bd9t3&dl=0" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Catalogue</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- AIRPLUM -->
+    <div class="brand-block reveal">
+      <div class="brand-visual">
+        <img src="https://www.ducatillon.fr/23968-large_default/chaussons-mules-decycle-marine-pantoufles-confort-unisexe.jpg" alt="Airplum">
+        <div class="brand-visual-overlay"></div>
+      </div>
+      <div class="brand-info">
+        <div>
+          <div class="brand-tag"><i class="fas fa-feather"></i> Légèreté — Fabrication France</div>
+          <h3 class="brand-name">Air<br>plum</h3>
+          <p class="brand-desc">Airplum se distingue par son engagement à fournir des produits qui combinent confort exceptionnel et esthétique soignée. Chaque paire est le fruit d'une fabrication minutieuse, réalisée en France. Leur semelle innovante brevetée assure un amorti optimal et soulage les pressions exercées sur les pieds, garantissant une sensation de légèreté tout au long de la journée. La marque valorise le savoir-faire artisanal français, mettant en avant des techniques de fabrication traditionnelles pour créer des produits authentiques, durables et de qualité supérieure — entièrement fabriqués en France.</p>
+        </div>
+        <div class="brand-actions">
+          <a class="btn-primary" href="https://airplum.fr/?lang=en%2F" target="_blank" rel="noopener"><i class="fas fa-arrow-up-right-from-square"></i> Site officiel</a>
+          <a class="btn-secondary" href="https://www.dropbox.com/scl/fi/7t2ho8vypy7d70zoamuj9/CATALOGUE-E26-LIGHT2.pdf?rlkey=yblepc47sdb3j5bjlc5aen1sw&e=2&st=7f29nrew&dl=0" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Catalogue</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- GALLERY -->
+<section class="gallery-section">
+  <div class="reveal">
+    <div class="section-label" style="color:var(--gold);">Galerie</div>
+    <h2 class="section-title" style="color:var(--ink);">Les collections<br><em style="color:var(--gold);">en images</em></h2>
+  </div>
+  <div class="gallery-grid reveal">
+    <div class="gal-item" style="grid-column:1/7; height:360px;">
+      <img src="https://s7d4.scene7.com/is/image/WolverineWorldWide/S70963-1_1?$dw-hi-res$" alt="Image 1">
+    </div>
+    <div class="gal-item" style="grid-column:7/13; height:360px;">
+      <img src="https://tse1.mm.bing.net/th/id/OIP.eNxx2o8fQB2nl1zweCnXLAHaHa?cb=thfvnext&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Image 2">
+    </div>
+    <div class="gal-item" style="grid-column:1/5; height:280px;">
+      <img src="https://static.wixstatic.com/media/9e5a83_0d18090c80ad417ebd040674d2c69a49~mv2.jpg/v1/fill/w_562,h_542,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/18289114051218545.jpg" alt="Image 3">
+    </div>
+    <div class="gal-item" style="grid-column:5/9; height:280px;">
+      <img src="https://soulierscompagnie.com/42481-home_default/dubai-v1-cuir-kaki-vert-play-one.jpg" alt="Image 4">
+    </div>
+    <div class="gal-item" style="grid-column:9/13; height:280px;">
+      <img src="https://www.bing.com/th?id=OPEC.5euGMynoWsaOhg474C474&o=5&pid=21.1&w=128&h=188&qlt=100&dpr=1,3&o=2&bw=6&bc=FFFFFF" alt="Image 5">
     </div>
   </div>
 </section>
 
-<!--  -->
-<section class="brand-section">
-  <h2>HIP Kids</h2>
-  <div class="services-grid">
-    <div class="card">
-      <div class="card-content">
-        <i class="fas fa-child"></i>
-        <h3>Confort quotidien</h3>
-        <p>Hip est une marque néerlandaise fondée dans les années 1970, reconnue pour son savoir-faire dans la création de chaussures pour enfants à la fois stylées, confortables et de grande qualité. Alliant design contemporain et finitions soignées, la maison Hip met un point d’honneur à proposer des modèles qui reflètent les tendances actuelles tout en restant adaptés au quotidien des plus jeunes. Fabriquées avec des matériaux nobles et des cuirs souples, les chaussures Hip accompagnent les enfants dans toutes leurs aventures, entre confort, liberté de mouvement et élégance décontractée. Fidèle à son esprit moderne et créatif, la marque offre une collection variée où chaque paire se distingue par son caractère et son souci du détail. Sur notre e-shop, découvrez la sélection Hip : des sneakers urbaines aux bottines raffinées, parfaites pour conjuguer style et confort à chaque pas.
-      </div>
-      <div class="card-actions">
-        <a class="btn" href="https://www.hipshoestyle.com/" target="_blank" rel="noopener">Site officiel</a>
-        <a class="btn secondary" href="#" data-url="" target="_blank" rel="noopener">Catalogue</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- PLAYONE -->
-<section>
-  <h2>PlayOne</h2>
-  <div class="services-grid">
-    <div class="card">
-      <div class="card-content">
-        <i class="fas fa-running"></i>
-        <h3>Sport Lifestyle</h3>
-        <p>Play One est une marque italienne qui puise son inspiration dans l’art du mouvement et le goût du beau. Chaque paire est pensée et fabriquée avec soin, en utilisant des matériaux de qualité sélectionnés pour leur souplesse, leur résistance et leur confort. Cuirs véritables, textiles techniques et semelles légères se combinent pour offrir des chaussures aussi agréables à porter qu’élégantes à regarder. Fidèle au savoir-faire italien, Play One mise sur des lignes épurées, des finitions précises et un style intemporel, pensé pour s’adapter aussi bien aux journées actives qu’aux moments plus détendus.
-      </div>
-      <div class="card-actions">
-        <a class="btn" href="https://www.dropbox.com/scl/fi/0c5brwb1g28bc2on2qc4p/MERRELL-KIDS-EU-AW26-FOOTWEAR-CATALOGUE.pdf?rlkey=2a5kv290popnpkxg0nihb2r64&e=2&st=jihhfokb&dl=0" target="_blank" rel="noopener">Site officiel</a>
-        <a class="btn secondary" href="https://www.dropbox.com/scl/fi/qi6lipexq9b63730h6uqv/catalogo_playone_agosto_def1_compressed.pdf?rlkey=9r8seu4f8f560ru391vs4ntzf&e=1&st=945bd9t3&dl=0" target="_blank" rel="noopener">Catalogue</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- AIRPLUM -->
-<section class="brand-section">
-  <h2>Airplum</h2>
-  <div class="services-grid">
-    <div class="card">
-      <div class="card-content">
-        <i class="fas fa-feather"></i>
-        <h3>Légèreté</h3>
-        <p>Airplum se distingue par son engagement à fournir des produits qui combinent confort exceptionnel et esthétique soignée. Chaque paire est le fruit d'une fabrication minutieuse, réalisée en France, et pensée pour offrir une expérience de port optimale. Leurs engagements 1. Confort et qualité Airplum accorde une importance primordiale au confort de ses produits. Grâce à des matériaux soigneusement sélectionnés et une conception ergonomique, leurs chaussons et mules offrent une expérience de port agréable et durable. Leur semelle innovante brevetée assure un amorti optimal et soulage les pressions exercées sur les pieds, garantissant ainsi une sensation de légèreté tout au long de la journée. 2. Savoir-faire artisanal La marque valorise le savoir-faire artisanal français, mettant en avant des techniques de fabrication traditionnelles pour créer des produits authentiques et de qualité supérieure. 3. Fabrication locale Tous les produits Airplum sont fabriqués en France, garantissant ainsi un contrôle rigoureux de la qualité et une réduction de l'empreinte carbone. Cela reflète leur engagement en faveur de la durabilité et du soutien à l'économie locale.
-      </div>
-      <div class="card-actions">
-        <a class="btn" href="https://airplum.fr/?lang=en%2F" target="_blank" rel="noopener">Site officiel</a>
-        <a class="btn secondary" href="https://www.dropbox.com/scl/fi/7t2ho8vypy7d70zoamuj9/CATALOGUE-E26-LIGHT2.pdf?rlkey=yblepc47sdb3j5bjlc5aen1sw&e=2&st=7f29nrew&dl=0" target="_blank" rel="noopener">Catalogue</a>
-      </div>
-    </div>
-  </div>
-</section>
-
+<!-- FOOTER -->
 <footer>
-  <p>© 2026 Réalisé par |  Louis Chiron</p>
+  <span class="footer-logo">Rodolphe Chiron</span>
+
 </footer>
 
+<script>
+// Scroll reveal
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+  });
+}, { threshold: 0.08 });
 
-
-   <!-- ===== MODULE GALERIE INDÉPENDANT ===== -->
-<style>
-/* WRAPPER ISOLÉ (aucun conflit possible) */
-#white-veil-gallery {
-    position: relative;
-    padding: 80px 20px;
-    background: #ffffff;
-    display: flex;
-    justify-content: center;
-}
-
-/* VOILE BLANC */
-#white-veil-gallery::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: rgba(255, 255, 255, 0.75);
-    backdrop-filter: blur(4px);
-    z-index: 1;
-}
-
-/* CONTENEUR */
-#white-veil-gallery .wv-container {
-    position: relative;
-    z-index: 2;
-    max-width: 1200px;
-    width: 100%;
-    text-align: center;
-}
-
-/* TITRE */
-#white-veil-gallery .wv-title {
-    font-size: 2.3rem;
-    margin-bottom: 50px;
-    font-weight: 600;
-    color: #222;
-}
-
-/* GRID */
-#white-veil-gallery .wv-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 30px;
-}
-
-/* ITEM */
-#white-veil-gallery .wv-item {
-    overflow: hidden;
-    border-radius: 18px;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.08);
-    transition: transform 0.4s ease, box-shadow 0.4s ease;
-    cursor: pointer;
-}
-
-/* IMAGE */
-#white-veil-gallery .wv-item img {
-    width: 100%;
-    height: 300px;
-    object-fit: cover;
-    transition: transform 0.5s ease;
-}
-
-/* HOVER */
-#white-veil-gallery .wv-item:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 25px 45px rgba(0,0,0,0.15);
-}
-
-#white-veil-gallery .wv-item:hover img {
-    transform: scale(1.08);
-}
-
-/* RESPONSIVE */
-@media (max-width: 768px) {
-    #white-veil-gallery .wv-item img {
-        height: 230px;
-    }
-}
-</style>
-
-<section id="white-veil-gallery">
-    <div class="wv-container">
-        <h2 class="wv-title">Galerie</h2>
-        <div class="wv-grid">
-
-            <div class="wv-item">
-                <img src="https://s7d4.scene7.com/is/image/WolverineWorldWide/S70963-1_1?$dw-hi-res$" alt="Image 1">
-            </div>
-
-            <div class="wv-item">
-                <img src="https://www.bing.com/th?id=OPEC.t0NTs%2bnBeKzfTA474C474&o=5&pid=21.1&w=140&h=106&qlt=100&dpr=1,3&o=2&pcl=f5f5f5" alt="Image 2">
-            </div>
-
-            <div class="wv-item">
-                <img src="https://static.wixstatic.com/media/9e5a83_0d18090c80ad417ebd040674d2c69a49~mv2.jpg/v1/fill/w_562,h_542,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/18289114051218545.jpg" alt="Image 3">
-            </div>
-
-            <div class="wv-item">
-                <img src="https://soulierscompagnie.com/42481-home_default/dubai-v1-cuir-kaki-vert-play-one.jpg" alt="Image 4">
-            </div>
-
-            <div class="wv-item">
-                <img src="https://www.bing.com/th?id=OPEC.5euGMynoWsaOhg474C474&o=5&pid=21.1&w=128&h=188&qlt=100&dpr=1,3&o=2&bw=6&bc=FFFFFF" alt="Image 5">
-            </div>
-
-        </div>
-    </div>
-</section>
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
 
 </body>
 </html>
